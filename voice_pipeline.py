@@ -11,7 +11,7 @@ from pathlib import Path
 
 from config import SHARED_DIR_WSL, MARKER_FILE, AUDIO_FILE, RESULT_FILE
 from stt_engine import transcribe
-from llm_formatter import format_prompt, check_ollama_health
+from text_cleaner import clean_text
 
 logging.basicConfig(
     level=logging.INFO,
@@ -82,18 +82,13 @@ def process_audio() -> None:
 
     logger.info(f"STT result: {chinese_text}")
 
-    # Step 2: LLM formatting
-    if check_ollama_health():
-        formatted = format_prompt(chinese_text)
-        ollama_used = formatted != chinese_text
-    else:
-        logger.warning("Ollama not available, using raw text")
-        formatted = chinese_text
-        ollama_used = False
+    # Step 2: Rule-based text cleaning
+    formatted = clean_text(chinese_text)
+    logger.info(f"Cleaned ({len(chinese_text)}→{len(formatted)} chars)")
 
     # Step 3: Clipboard
     if set_clipboard(formatted):
-        status = "ok_llm" if ollama_used else "ok_raw"
+        status = "ok_clean"
         preview = formatted[:100].replace("\n", " ") + "..."
         write_result(status, preview)
         logger.info("Pipeline complete — prompt in clipboard")
@@ -109,11 +104,7 @@ def watch_loop() -> None:
     ensure_shared_dir()
     logger.info(f"Watching {SHARED_DIR_WSL} for {MARKER_FILE}...")
     logger.info("Press Ctrl+C to stop.")
-
-    if check_ollama_health():
-        logger.info("Ollama: connected")
-    else:
-        logger.warning("Ollama: not available (run 'ollama serve' in another terminal)")
+    logger.info("Mode: rule-based cleaning (no LLM)")
 
     marker = SHARED_DIR_WSL / MARKER_FILE
     audio = SHARED_DIR_WSL / AUDIO_FILE
