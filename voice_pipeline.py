@@ -92,9 +92,6 @@ def process_audio() -> None:
         ollama_used = False
 
     # Step 3: Clipboard
-    if ollama_used:
-        formatted = formatted.rstrip() + "\n\n---\nReply in Simplified Chinese (简体中文)."
-
     if set_clipboard(formatted):
         status = "ok_llm" if ollama_used else "ok_raw"
         preview = formatted[:100].replace("\n", " ") + "..."
