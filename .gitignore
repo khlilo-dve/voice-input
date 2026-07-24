@@ -1,0 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.venv/
+venv/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Runtime
+/tmp/
+*.log
+/mnt/c/voice-input/*.wav
+/mnt/c/voice-input/*.txt
+
+# Models (too large for git)
+*.bin
+*.gguf
+*.safetensors
