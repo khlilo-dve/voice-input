@@ -18,7 +18,7 @@ MARKER_FILE = "ready.txt"
 RESULT_FILE = "result.txt"  # WSL pipeline writes result, Windows recorder reads it
 
 # ── Audio ──────────────────────────────────────────────
-SAMPLE_RATE = 1.1.0
+SAMPLE_RATE = 16000
 CHANNELS = 1
 SAMPLE_WIDTH = 2  # 16-bit
 AUDIO_FORMAT = "wav"
